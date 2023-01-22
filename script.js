@@ -1,11 +1,36 @@
 let objetoNome;
+function tratarErroEnvioMensagem(erro){
+    console.log("Erro! não foi possível registrar a sua mensagem. Status code: "+erro.response.status);
+    location.reload;
+}
+
+function enviarMensagem(){
+    const elementoInput = document.querySelector("input");
+    if(elementoInput.value === ""){
+        alert("Digite sua mensagem antes de enviá-la");
+    }
+    else{
+        const destinatario = prompt("Digite o nome do destinatário: Todos");
+        const mensagemPublica = prompt ("Digite o tipo da mensagem: message");
+        const objeto = {
+            from: objetoNome.name,
+            to: destinatario,
+            text: elementoInput.value,
+            type: mensagemPublica,
+        }
+        const promise = axios.post("https://mock-api.driven.com.br/api/v6/uol/messages",objeto);
+        promise.then(tratarSucessoNasMensagens);
+        promise.catch(tratarErroEnvioMensagem);
+        elementoInput.value = "";
+    }
+}
 function tratarSucessoNoStatus(resposta){
     console.log("Usuário conectado. Status code: "+resposta.status);
 }
 function tratarErroNoStatus(erro){
     console.log(erro);
     alert("Erro na verificação do status do usuário");
-    entrarNaSala();
+    location.reload;
 }
 function verificarStatusDoUsuario(){
     const promise = axios.post("https://mock-api.driven.com.br/api/v6/uol/status",objetoNome);
@@ -13,7 +38,6 @@ function verificarStatusDoUsuario(){
     promise.catch(tratarErroNoStatus);
 }
 function tratarSucessoNasMensagens(resposta){
-    console.log("mensagens carregadas com sucesso. Status code: "+resposta.status);
     //Buscar e selecionar o elemento html que conterá as mensagens carregadas
     const elemento = document.querySelector("main");
     //Percorrer o array de objetos (resposta.data), exibindo as mensagens na tela
@@ -35,7 +59,8 @@ function tratarSucessoNasMensagens(resposta){
         </div>`
         }   
     }
-    elemento.scrollIntoView(false);    
+    elemento.scrollIntoView(false);
+    console.log("mensagens carregadas com sucesso. Status code: "+resposta.status);    
 }
 function tratarErroNasMensagens(erro){
     console.log("Status code: "+erro.response.status);
