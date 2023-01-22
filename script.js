@@ -1,7 +1,7 @@
 let objetoNome;
 function tratarErroEnvioMensagem(erro){
     console.log("Erro! não foi possível registrar a sua mensagem. Status code: "+erro.response.status);
-    location.reload;
+    entrarNaSala();
 }
 
 function enviarMensagem(){
@@ -30,7 +30,7 @@ function tratarSucessoNoStatus(resposta){
 function tratarErroNoStatus(erro){
     console.log(erro);
     alert("Erro na verificação do status do usuário");
-    location.reload;
+    entrarNaSala();
 }
 function verificarStatusDoUsuario(){
     const promise = axios.post("https://mock-api.driven.com.br/api/v6/uol/status",objetoNome);
@@ -44,17 +44,17 @@ function tratarSucessoNasMensagens(resposta){
     for(let i = 0; i < resposta.data.length; i++){
         let objetoMensagem = resposta.data[i]; 
         if(objetoMensagem.type === 'status'){
-            elemento.innerHTML += `<div class="status mensagem">
+            elemento.innerHTML += `<div class="status mensagem" data-test="message">
             <p><span>(${objetoMensagem.time})</span><strong> ${objetoMensagem.from}</strong> ${objetoMensagem.text}</p>
         </div>`
         }
         else if(objetoMensagem.type === 'message'){
-            elemento.innerHTML += `<div class="normal mensagem">
+            elemento.innerHTML += `<div class="normal mensagem" data-test="message">
             <p><span>(${objetoMensagem.time})</span><strong> ${objetoMensagem.from}</strong> para <strong>${objetoMensagem.to}:</strong> ${objetoMensagem.text}</p>
         </div>`
         }
         else if(objetoMensagem.to === objetoNome.name){
-            elemento.innerHTML += `<div class="reservada mensagem">
+            elemento.innerHTML += `<div class="reservada mensagem" data-test="message">
             <p><span>(${objetoMensagem.time})</span><strong> ${objetoMensagem.from}</strong> reservadamente para <strong>${objetoMensagem.to}:</strong> ${objetoMensagem.text}</p>
         </div>`
         }   
