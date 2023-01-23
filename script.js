@@ -40,6 +40,8 @@ function verificarStatusDoUsuario(){
 function tratarSucessoNasMensagens(resposta){
     //Buscar e selecionar o elemento html que conterá as mensagens carregadas
     const elemento = document.querySelector("main");
+    //limpar as mensagens antigas
+    elemento.innerHTML = "";
     //Percorrer o array de objetos (resposta.data), exibindo as mensagens na tela
     for(let i = 0; i < resposta.data.length; i++){
         let objetoMensagem = resposta.data[i]; 
@@ -59,7 +61,7 @@ function tratarSucessoNasMensagens(resposta){
         </div>`
         }   
     }
-    elemento.scrollIntoView(false);
+    document.querySelector(".mensagem:last-child").scrollIntoView();
     console.log("mensagens carregadas com sucesso. Status code: "+resposta.status);    
 }
 function tratarErroNasMensagens(erro){
